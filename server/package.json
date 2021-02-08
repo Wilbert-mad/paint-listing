@@ -1,0 +1,19 @@
+{
+  "name": "paint-server",
+  "version": "1.0.0",
+  "description": "pain discord bot's server side",
+  "main": "dist/index.js",
+  "scripts": {
+    "watch": "tsc --watch"
+  },
+  "author": "Wilbert-mad",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/morgan": "^1.9.2"
+  }
+}
