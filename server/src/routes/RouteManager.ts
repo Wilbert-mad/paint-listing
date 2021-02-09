@@ -1,8 +1,15 @@
 import { Router } from 'express';
 const route = Router();
 
-import main from './main';
+import users from './users/';
 
-route.use('/', main);
+/**
+ * users of the database:
+ * * id
+ * * username
+ * * bots
+ * * servers
+ */
+route.use('/users', users);
 
 export default route;
