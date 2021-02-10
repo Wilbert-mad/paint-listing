@@ -1,0 +1,67 @@
+.red-spice {
+  color: #f7f7f7;
+  height: 500px;
+  background: linear-gradient(106.54deg, #a83f3f 18.49%, #682b2b 74.24%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  clip-path: polygon(0 0, 100% 0, 73% 100%, 24% 100%);
+  h1 {
+    font-size: 15rem;
+    line-height: 234px;
+  }
+}
+
+.content {
+  .content-searchform {
+    padding-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    input {
+      width: 500px;
+      height: 40px;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  }
+}
+
+@media only screen and (max-width: 930px) {
+  .red-spice {
+    clip-path: none;
+  }
+}
+
+@media only screen and (max-width: 550px) {
+  .red-spice {
+    h1 {
+      font-size: 10rem;
+    }
+  }
+}
+
+@media only screen and (max-width: 420px) {
+  .red-spice {
+    h1 {
+      font-size: 5rem;
+    }
+  }
+
+  .content {
+    .content-searchform {
+      padding-top: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      input {
+        width: 240px;
+        height: 40px;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+a {
+  padding: 5px;
+  border-radius: 2px;
+  font-size: 18px;
+  background-color: #ec4f4f;
+  border: none;
+  color: #f0f0f0;
+  &:hover {
+    cursor: pointer;
+  }
+}

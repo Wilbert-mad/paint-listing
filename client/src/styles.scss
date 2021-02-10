@@ -4,9 +4,19 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
 }
 
 body {
+  background-color: #e4e4e4;
+  color: #474747;
+}
+
+body.dark {
   background-color: #3c3c3c;
   color: #f3f3f3;
+}
+
+a {
+  text-decoration: none;
 }
