@@ -4,13 +4,16 @@
   "description": "pain discord bot's server side",
   "main": "dist/index.js",
   "scripts": {
+    "start": "node dist/index.js",
     "watch": "tsc --watch",
-    "dev:build": "nodemon ."
+    "dev:build": "nodemon .",
+    "build": "tsc --build"
   },
   "author": "Wilbert-mad",
   "license": "Apache-2.0",
   "dependencies": {
     "express": "^4.17.1",
+    "helmet": "^4.4.1",
     "morgan": "^1.10.0",
     "mysql2": "^2.2.5"
   },

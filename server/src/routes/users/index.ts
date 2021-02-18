@@ -1,44 +1,12 @@
 import { Request, Response, Router } from 'express';
+import databaseManager from '../../lib/databaseManager';
 const route = Router();
-
-export interface userServer {
-  id: string;
-}
-
-export interface userBot {
-  id: string;
-}
-
-export interface user {
-  id: string;
-  username: string;
-  bots: userBot[];
-  servers: userServer[];
-}
-
-// NOTE: only template holder data
-const users: user[] = [
-  {
-    id: '1',
-    username: 'gamerpop',
-    bots: [
-      {
-        id: '1',
-      },
-    ],
-    servers: [
-      {
-        id: '1',
-      },
-    ],
-  },
-];
 
 route.get('/:id', (req: Request, res: Response) => {
   const { id } = req.params;
-  const user = users.find(u => u.id === id);
+  const user = databaseManager.users.get(id);
   if (!user) return res.status(404).json({ error: 'User not found' });
-  res.send(user);
+  res.json(user);
 });
 
 interface userBotsGetOps {
@@ -48,11 +16,15 @@ interface userBotsGetOps {
 route.get('/:id/bots', (req: Request<{ id: string }, any, any, userBotsGetOps, Record<string, any>>, res: Response) => {
   const { id } = req.params;
   const { id: QId } = req.query;
-  const user = users.find(u => u.id === id);
+  const user = databaseManager.users.get(id);
   if (!user) return res.status(404).json({ error: 'User not found' });
-  const bot = user.bots.find(b => b.id === QId);
-  if (!bot) return res.json({ error: 'User bot not found' });
-  res.json(bot);
+  if (QId) {
+    const bot = databaseManager.bots.get(QId);
+    if (!bot) return res.json({ error: 'User bot not found' });
+    return res.json(bot);
+  }
+  const botIDs = user.UserBots;
+  res.json(botIDs ?? []);
 });
 
 interface userServerGetOps {
@@ -64,11 +36,15 @@ route.get(
   (req: Request<{ id: string }, any, any, userServerGetOps, Record<string, any>>, res: Response) => {
     const { id } = req.params;
     const { id: QId } = req.query;
-    const user = users.find(u => u.id === id);
+    const user = databaseManager.users.get(id);
     if (!user) return res.status(404).json({ error: 'User not found' });
-    const server = user.servers.find(s => s.id === QId);
-    if (!server) return res.status(404).json({ error: 'User sever not found' });
-    res.json(server);
+    if (QId) {
+      const server = databaseManager.servers.get(QId);
+      if (!server) return res.status(404).json({ error: 'User sever not found' });
+      return res.json(server);
+    }
+    const serverIDs = user.UserServers;
+    return res.json(serverIDs ?? []);
   }
 );
 
