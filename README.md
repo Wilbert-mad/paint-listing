@@ -11,7 +11,7 @@ A nother discord listing!
 
 ### Database
 
-UNKNOWN: sql type!
+Database is Mysql.
 
 # Schemas
 
@@ -22,12 +22,15 @@ UNKNOWN: sql type!
 (
 UserId TEXT NOT NULL PRIMARY KEY,
 UserServers TEXT,
+UserBots TEXT,
 )
 
 ## Bot
 
 (
 BotId TEXT NOT NULL,
+Name TEXT NOT NULL,
+ownerIDs TEXT NOT NULL,
 PRIMARY KEY('UserId', 'BotId')
 )
 
@@ -36,6 +39,6 @@ PRIMARY KEY('UserId', 'BotId')
 (
 ServerId TEXT NOT NULL,
 Name TEXT NOT NULL,
-Owner TEXT NOT NULL,
+ownerID TEXT NOT NULL,
 PRIMARY KEY('UserId', 'ServerId')
 )
