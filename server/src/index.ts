@@ -1,8 +1,21 @@
 import express from 'express';
-import morgan from 'morgan';
+import session from 'express-session';
 import helmet from 'helmet';
+import morgan from 'morgan';
+import { secret } from './configs.security';
 import db from './lib/databaseManager';
+import passport from './lib/discordAuth';
+import route from './routes/RouteManager';
 const app = express();
+
+declare global {
+  namespace Express {
+    interface User {
+      // NOTE: add real types not just any'
+      [key: string]: any;
+    }
+  }
+}
 
 (async () => await db.connect())();
 
@@ -16,9 +29,20 @@ app.use((req, res, next) => {
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.urlencoded({ extended: true }));
 
-import route from './routes/RouteManager';
+app.use(
+  session({
+    secret,
+    cookie: {
+      maxAge: 60 * 1000 * 60 * 24,
+    },
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use('/', route);
 

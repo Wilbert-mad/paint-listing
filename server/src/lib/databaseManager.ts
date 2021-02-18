@@ -3,14 +3,17 @@ import { database, password, user } from '../configs.security';
 
 export interface userServer {
   ServerId: string;
-  Name: string;
+  _Name: string;
   ownerID: string;
+  emojis: { id: string; name: string }[];
 }
 
 export interface userBot {
   BotId: string;
-  Name: string;
+  _Name: string;
   ownerIDs: string[];
+  _accessToken: string;
+  _Description?: string;
 }
 
 export interface user {
@@ -30,15 +33,17 @@ const users: user[] = [
 const bots: userBot[] = [
   {
     BotId: '1',
-    Name: 'micro',
+    _Name: 'micro',
     ownerIDs: ['109827308'],
+    _accessToken: 'aw8cjdf98awum9fc8m8e',
   },
 ];
 const servers: userServer[] = [
   {
     ServerId: '1',
-    Name: 'gulp',
+    _Name: 'gulp',
     ownerID: '9385098',
+    emojis: [],
   },
 ];
 
