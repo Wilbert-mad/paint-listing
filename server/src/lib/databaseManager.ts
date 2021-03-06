@@ -16,20 +16,14 @@ export interface userBot {
   _Description?: string;
 }
 
-export interface user {
+export interface dbUser {
   UserId: string;
+  avatar?: string;
   UserBots?: string[];
   UserServers?: string[];
 }
 
 // NOTE: only template holder data
-const users: user[] = [
-  {
-    UserId: '1',
-    UserBots: ['1'],
-    UserServers: ['1'],
-  },
-];
 const bots: userBot[] = [
   {
     BotId: '1',
@@ -54,9 +48,26 @@ class BaseDatabase {
   }
 }
 
+interface IUser extends dbUser {
+  constructor: {
+    name: 'RowDataPacket';
+  };
+}
 class UsersDatabase extends BaseDatabase {
-  get(id: string): user | undefined {
-    return users.find(u => u.UserId === id);
+  private _cache = new Map<string, IUser>();
+  async get(id: string): Promise<dbUser | undefined> {
+    if (this._cache.has(id)) return this._cache.get(id);
+    const exi = await this.connection?.query<IUser[]>(`SELECT * FROM Users WHERE UserId = ${id}`);
+    if (!exi) return undefined;
+    const user = exi[0].find(f => f.UserId === id);
+    if (!user) return undefined;
+    this._cache.set(id, user);
+    return user;
+  }
+  async create(id: string, av: string | null): Promise<dbUser | undefined> {
+    await this.connection?.execute<IUser[]>(`INSERT INTO Users (UserId, avatar) VALUES ("${id}", "${av}");`);
+    const exi = await this.get(id);
+    return exi;
   }
 }
 
@@ -96,6 +107,12 @@ class databaseMainiger {
         })
         .then(connection => {
           console.log('ready');
+          connection.execute(`CREATE TABLE IF NOT EXISTS Users(
+            UserId VARCHAR(20) NOT NULL PRIMARY KEY,
+            avatar TEXT,
+            UserServers JSON,
+            UserBots JSON
+          );`);
           return connection;
         });
     } catch (error) {

@@ -2,9 +2,9 @@ import { Request, Response, Router } from 'express';
 import databaseManager from '../../lib/databaseManager';
 const route = Router();
 
-route.get('/:id', (req: Request, res: Response) => {
+route.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  const user = databaseManager.users.get(id);
+  const user = await databaseManager.users.get(id);
   if (!user) return res.status(404).json({ error: 'User not found' });
   res.json(user);
 });
@@ -13,19 +13,22 @@ interface userBotsGetOps {
   id: string;
 }
 
-route.get('/:id/bots', (req: Request<{ id: string }, any, any, userBotsGetOps, Record<string, any>>, res: Response) => {
-  const { id } = req.params;
-  const { id: QId } = req.query;
-  const user = databaseManager.users.get(id);
-  if (!user) return res.status(404).json({ error: 'User not found' });
-  if (QId) {
-    const bot = databaseManager.bots.get(QId);
-    if (!bot) return res.json({ error: 'User bot not found' });
-    return res.json(bot);
+route.get(
+  '/:id/bots',
+  async (req: Request<{ id: string }, any, any, userBotsGetOps, Record<string, any>>, res: Response) => {
+    const { id } = req.params;
+    const { id: QId } = req.query;
+    const user = await databaseManager.users.get(id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    if (QId) {
+      const bot = databaseManager.bots.get(QId);
+      if (!bot) return res.json({ error: 'User bot not found' });
+      return res.json(bot);
+    }
+    const botIDs = user.UserBots;
+    res.json(botIDs ?? []);
   }
-  const botIDs = user.UserBots;
-  res.json(botIDs ?? []);
-});
+);
 
 interface userServerGetOps {
   id: string;
@@ -33,10 +36,10 @@ interface userServerGetOps {
 
 route.get(
   '/:id/servers',
-  (req: Request<{ id: string }, any, any, userServerGetOps, Record<string, any>>, res: Response) => {
+  async (req: Request<{ id: string }, any, any, userServerGetOps, Record<string, any>>, res: Response) => {
     const { id } = req.params;
     const { id: QId } = req.query;
-    const user = databaseManager.users.get(id);
+    const user = await databaseManager.users.get(id);
     if (!user) return res.status(404).json({ error: 'User not found' });
     if (QId) {
       const server = databaseManager.servers.get(QId);

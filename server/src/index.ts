@@ -11,8 +11,10 @@ const app = express();
 declare global {
   namespace Express {
     interface User {
-      // NOTE: add real types not just any'
-      [key: string]: any;
+      UserId: string;
+      avatar?: string;
+      UserBots?: string[];
+      UserServers?: string[];
     }
   }
 }
